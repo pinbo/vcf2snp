@@ -7,7 +7,7 @@
 package main
 import (
     "bufio"
-    "fmt"
+    //"fmt"
     "os"
     s "strings"
     "strconv"
@@ -15,26 +15,19 @@ import (
 
 func main () {
 	// my program starts
-	if len(os.Args) < 3 {
-		fmt.Println("Please provide 2 arguments: input vcf file, output file name")
-		os.Exit(1)
-	}
-	input := os.Args[1]
-	output := os.Args[2]
 	//info, _ := os.Stdin.Stat()
 	var scanner *bufio.Scanner
-	if input == "-" {
+	if len(os.Args) == 1 { // no argument
 		scanner = bufio.NewScanner(os.Stdin)
 	} else {
+		input := os.Args[1]
 		infile, err := os.Open(input)
 		check(err)
 		defer infile.Close()
 		scanner = bufio.NewScanner(infile)
 	}
-	outfile, err := os.Create(output)
-	check(err)
-	defer outfile.Close()
-	w := bufio.NewWriter(outfile)
+
+	w := bufio.NewWriter(os.Stdout)
 	
 	// parse commments
 	for scanner.Scan() {
@@ -51,11 +44,13 @@ func main () {
 	// parse the first line to know the format
 	for scanner.Scan() {
 		line := scanner.Text()
-		outline := parse2(line)
+		outline := parse(line)
 		w.WriteString(outline + "\n")
 	}
 	w.Flush()
 }
+
+// functions
 
 func check(e error) {
     if e != nil {
@@ -89,7 +84,7 @@ func gt2snpv2 (ref string , alt string, gt string) string {
 }
 
 // FORMAT is more than GT
-func parse2 (line string) string {
+func parse (line string) string {
 	ll := s.Split(line, "\t")
 	GTs := ll[9:]
 	for pos, gt := range GTs {
