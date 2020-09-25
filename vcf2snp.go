@@ -7,7 +7,7 @@
 package main
 import (
     "bufio"
-    //"fmt"
+    "fmt"
     "os"
     s "strings"
     "strconv"
@@ -16,6 +16,7 @@ import (
 func main () {
 	// my program starts
 	//info, _ := os.Stdin.Stat()
+	fmt.Println("vcf2snp takes a vcf file or stdin and output to stdout")
 	var scanner *bufio.Scanner
 	if len(os.Args) == 1 { // no argument
 		scanner = bufio.NewScanner(os.Stdin)
